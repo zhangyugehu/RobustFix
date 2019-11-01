@@ -4,13 +4,17 @@ import android.text.TextUtils;
 
 import com.meituan.robust.Patch;
 import com.thssh.common.log.AppLog;
+import com.thssh.hotfix.Config;
+import com.thssh.hotfix.robust.model.CryptPatch;
 import com.thssh.hotfix.util.IoUtils;
+import com.thssh.hotfix.util.MD5Tools;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -72,9 +76,27 @@ public class DefaultPatchDownloader implements PatchDownloader {
 
     }
 
-    @Override
-    public List<Patch> fetchPatchListSync() {
+    // 和robust.xml中patchPackname必须保持一致
+    private static final String PKG_NAME = "com.thssh.hotfix.patch";
+    private static final String DOT = ".";
+    private static final String CLZ_NAME = "PatchesInfoImpl";
 
-        return null;
+    @Override
+    public List<Patch> fetchPatchListSync(String dir) {
+
+//        File patchDir = new File(getLocalDir(context), "patches");
+//        File patchDir = new File(dir);
+        List<Patch> patches = new ArrayList<>(5);
+        CryptPatch patch = new CryptPatch();
+        // name暂存加密后的密钥
+        patch.setName(MD5Tools.toMD5(Config.TEST_CRYPTO_GRAPH));
+        patch.setRsaKey(Config.TEST_CRYPTO_GRAPH);
+        patch.setPatchesInfoImplClassFullName(PKG_NAME + DOT + CLZ_NAME);
+//        String patchName = MD5Tools.toMD5(TEST_CRYPTO_GRAPH);
+        patch.setLocalPath(dir + File.separator + "patch");
+        patch.setUrl(Config.TEST_URL);
+        patch.setMd5(Config.TEST_MD5);
+        patches.add(patch);
+        return patches;
     }
 }

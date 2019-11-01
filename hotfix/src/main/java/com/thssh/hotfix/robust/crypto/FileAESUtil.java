@@ -11,27 +11,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class AESFileCrypto implements FileCrypto {
+public class FileAESUtil {
 
     private static final String ALGORITHM = "AES";
     private static final int KEY_SIZE = 128;
 
-    public AESFileCrypto() {}
-
-    @Override
-    public void encrypt(File src, File encryptDest, String key) {
+    public static void encrypt(File src, File encryptDest, String key) {
         key = MD5Tools.toMD5(key);
 
         FileInputStream inputStream = null;
@@ -66,8 +59,7 @@ public class AESFileCrypto implements FileCrypto {
         }
     }
 
-    @Override
-    public void decrypt(File encryptSrc, File decryptDest, String key) {
+    public static void decrypt(File encryptSrc, File decryptDest, String key) {
         key = MD5Tools.toMD5(key);
 
         FileInputStream inputStream = null;
@@ -102,39 +94,19 @@ public class AESFileCrypto implements FileCrypto {
 
     }
 
-    @Override
-    public void encrypt(String srcPath, String encryptDestPath, String key) {
+    public static void encrypt(String srcPath, String encryptDestPath, String key) {
         if (TextUtils.isEmpty(srcPath) || TextUtils.isEmpty(encryptDestPath)) return;
         encrypt(new File(srcPath), new File(encryptDestPath), key);
     }
 
-    @Override
-    public void decrypt(String encryptSrcPath, String decryptDestPath, String key) {
+    public static void decrypt(String encryptSrcPath, String decryptDestPath, String key) {
         if (TextUtils.isEmpty(encryptSrcPath) || TextUtils.isEmpty(decryptDestPath)) return;
         decrypt(new File(encryptSrcPath), new File(decryptDestPath), key);
     }
 
-//    private Cipher getAesCipher(String key, int mode)
-//            throws Exception {
-//
-//        KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
-//        SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-//        secureRandom.setSeed(key.getBytes());
-//        keyGenerator.init(KEY_SIZE, secureRandom);
-//        // https://stackoverflow.com/questions/8049872/given-final-block-not-properly-padded
-////        keyGenerator.init(KEY_SIZE, new SecureRandom(key.getBytes()));
-//        SecretKey secretKey = keyGenerator.generateKey();
-//        byte[] codeFormat = secretKey.getEncoded();
-//        SecretKeySpec spec = new SecretKeySpec(codeFormat, ALGORITHM);
-////        Key k = toKey(key.getBytes());
-//        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-//        cipher.init(mode, spec);
-//        return cipher;
-//    }
-
     public static final String VIPARA = "0102030405060708";
 
-    private Cipher getAesCipher(String key, int mode)
+    private static Cipher getAesCipher(String key, int mode)
             throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidAlgorithmParameterException, InvalidKeyException {
         IvParameterSpec zeroIv = new IvParameterSpec(VIPARA.getBytes());
@@ -144,17 +116,4 @@ public class AESFileCrypto implements FileCrypto {
         return cipher;
     }
 
-    public Key toKey(byte[] key) throws Exception {
-        SecretKey secretKey = new SecretKeySpec(key, ALGORITHM);
-        return secretKey;
-    }
-
-//    public void copy(InputStream is, OutputStream os) throws IOException {
-//        byte[] cache = new byte[1024];
-//        int len = 0;
-//        while ((len = is.read(cache)) != -1) {
-//            os.write(cache, 0, len);
-//            os.flush();
-//        }
-//    }
 }

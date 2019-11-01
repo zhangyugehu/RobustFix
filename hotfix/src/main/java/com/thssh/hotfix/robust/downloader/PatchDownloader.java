@@ -8,5 +8,5 @@ public interface PatchDownloader {
     boolean downloadSync(String url, String path);
     void download(String url, String path, Callback callback);
 
-    List<Patch> fetchPatchListSync();
+    List<Patch> fetchPatchListSync(String dir);
 }

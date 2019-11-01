@@ -7,7 +7,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
 
         def robustVer = "0.4.90"
         classpath "com.meituan.robust:gradle-plugin:$robustVer"

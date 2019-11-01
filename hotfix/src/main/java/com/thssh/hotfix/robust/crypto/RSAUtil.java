@@ -12,30 +12,7 @@ import javax.crypto.Cipher;
 
 public class RSAUtil {
     /** 指定加密算法为RSA */
-//    private static final String ALGORITHM = "RSA";
     private static final String ALGORITHM = "RSA/ECB/PKCS1Padding";
-
-//    /** 指定公钥存放文件 */
-//    private static String PUBLIC_KEY_FILE = "PublicKey";
-//    /** 指定私钥存放文件 */
-//    private static String PRIVATE_KEY_FILE = "PrivateKey";
-
-//    public static void main(String[] args) throws Exception {
-//
-//        String source = UUID.randomUUID().toString();// 要加密的字符串
-//        System.out.println("准备用私钥加密的字符串为：");
-//        System.out.println(source);
-//
-//        String cryptograph = encrypt(source);// 生成的密文
-//        System.out.println("用公钥私钥后的结果为:");
-//        System.out.println(cryptograph);
-//        System.out.println();
-//
-//        String target = decrypt(cryptograph);// 解密密文
-//        System.out.println("用公钥解密后的字符串为：");
-//        System.out.println(target);
-//        System.out.println();
-//    }
 
     /**
      * 加密方法
@@ -80,21 +57,6 @@ public class RSAUtil {
         byte[] contentBytes = cipher.doFinal(rsaContentBytes);
         return new String(contentBytes);
     }
-
-//    private static Key getKey(String fileName) throws Exception {
-//        Key key;
-//        ObjectInputStream ois = null;
-//        try {
-//            /** 将文件中的私钥对象读出 */
-//            ois = new ObjectInputStream(new FileInputStream(fileName));
-//            key = (Key) ois.readObject();
-//        } catch (Exception e) {
-//            throw e;
-//        } finally {
-//            ois.close();
-//        }
-//        return key;
-//    }
 
     private static Key getKey(InputStream is) throws Exception {
         Key key;
