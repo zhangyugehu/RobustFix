@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'auto-patch-plugin' // 制作补丁时将这个打开，auto-patch-plugin紧跟着com.android.application
+apply plugin: 'robust' // 制作补丁时将将robust关闭
+
+def mStoreFile = 'common.keystore'
+def mStorePassword = 'hth123456'
+def mKeyAlias = 'key0'
+def mKeyPassword = 'hth123456'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.thssh.robustfix"
+        minSdkVersion 15
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+    }
+    signingConfigs {
+        release {
+            storeFile file(mStoreFile)
+            storePassword mStorePassword
+            keyAlias mKeyAlias
+            keyPassword mKeyPassword
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix '.debug'
+            minifyEnabled false
+//            ndk {
+//                abiFilters 'armeabi-v7a'
+//            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':hotfix')
+    implementation project(':common')
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+}

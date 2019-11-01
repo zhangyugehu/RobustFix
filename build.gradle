@@ -1,0 +1,28 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.1'
+
+        def robustVer = "0.4.90"
+        classpath "com.meituan.robust:gradle-plugin:$robustVer"
+        classpath "com.meituan.robust:auto-patch-plugin:$robustVer"
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
