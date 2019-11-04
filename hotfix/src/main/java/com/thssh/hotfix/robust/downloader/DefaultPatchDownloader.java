@@ -71,11 +71,6 @@ public class DefaultPatchDownloader implements PatchDownloader {
         return file;
     }
 
-    @Override
-    public void download(String url, String path, Callback callback) {
-
-    }
-
     // 和robust.xml中patchPackname必须保持一致
     private static final String PKG_NAME = "com.thssh.hotfix.patch";
     private static final String DOT = ".";

@@ -14,11 +14,6 @@ import java.io.InputStream;
 public class DefaultPatchProcessor implements PatchProcessor {
 
     @Override
-    public void decodePatch(String cryptoGraph, Patch patch) throws ProcessException {
-        throw new ProcessException("not implement yet.");
-    }
-
-    @Override
     public void decodePatch(Context context, String rsaKey, Patch patch) throws ProcessException {
         try {
             InputStream inputStream = context.getAssets().open("rsa.pub");
