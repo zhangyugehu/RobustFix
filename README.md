@@ -10,4 +10,8 @@
 ## Reporter
 > 日志或者上报统计成功率
 
-[robust](https://pri-image-hosting.oss-cn-beijing.aliyuncs.com/robust.png)
+
+
+## 流程图
+
+![robust](https://pri-image-hosting.oss-cn-beijing.aliyuncs.com/robust.png)
