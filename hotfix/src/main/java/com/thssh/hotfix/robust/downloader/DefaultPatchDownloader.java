@@ -4,10 +4,12 @@ import android.text.TextUtils;
 
 import com.meituan.robust.Patch;
 import com.thssh.common.log.AppLog;
-import com.thssh.hotfix.Config;
 import com.thssh.hotfix.robust.model.CryptPatch;
 import com.thssh.hotfix.util.IoUtils;
-import com.thssh.hotfix.util.MD5Tools;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,6 +19,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -32,14 +35,16 @@ public class DefaultPatchDownloader implements PatchDownloader {
     @Override
     public boolean downloadSync(String url, String path) {
         if (TextUtils.isEmpty(url) || TextUtils.isEmpty(path)) return false;
+        AppLog.step(5, "do download patch file sync.");
         Request request = new Request.Builder()
                 .get()
                 .url(url)
                 .build();
         InputStream inputStream = null;
         OutputStream outputStream = null;
+        Response response = null;
         try {
-            Response response = client.newCall(request).execute();
+            response = client.newCall(request).execute();
             inputStream = response.body().byteStream();
             if (inputStream == null) return false;
             File destFile = newAndCreateFile(path);
@@ -51,11 +56,16 @@ public class DefaultPatchDownloader implements PatchDownloader {
                     return true;
                 }
             });
+            AppLog.step(5, "download success.");
         } catch (IOException e) {
+            AppLog.step(5, "download patch exception. " + e.getMessage());
             return false;
+        } catch (Exception e) {
+            AppLog.step(5, "download patch exception. " + e.getMessage());
         } finally {
             IoUtils.closeSilently(inputStream);
             IoUtils.closeSilently(outputStream);
+            if (response != null) response.close();
         }
         return true;
     }
@@ -78,20 +88,43 @@ public class DefaultPatchDownloader implements PatchDownloader {
 
     @Override
     public List<Patch> fetchPatchListSync(String dir) {
-
-//        File patchDir = new File(getLocalDir(context), "patches");
-//        File patchDir = new File(dir);
+        AppLog.step(1, "fetch patch list.");
+        Request request = new Request.Builder()
+                .get()
+                .url("http://yapi.demo.qunar.com/mock/27462/ceshi/patches?versionCode=0")
+                .build();
+        Call call = client.newCall(request);
         List<Patch> patches = new ArrayList<>(5);
-        CryptPatch patch = new CryptPatch();
-        // name暂存加密后的密钥
-        patch.setName(MD5Tools.toMD5(Config.TEST_CRYPTO_GRAPH));
-        patch.setRsaKey(Config.TEST_CRYPTO_GRAPH);
-        patch.setPatchesInfoImplClassFullName(PKG_NAME + DOT + CLZ_NAME);
-//        String patchName = MD5Tools.toMD5(TEST_CRYPTO_GRAPH);
-        patch.setLocalPath(dir + File.separator + "patch");
-        patch.setUrl(Config.TEST_URL);
-        patch.setMd5(Config.TEST_MD5);
-        patches.add(patch);
+        Response response = null;
+        try {
+            response = call.execute();
+            String json = response.body().string();
+            JSONArray ja = new JSONArray(json);
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject jo = ja.getJSONObject(i);
+                CryptPatch patch = new CryptPatch();
+                patch.setName(jo.getString("name"));
+                patch.setMd5(jo.getString("md5"));
+                patch.setAppHash(jo.getString("appHash"));
+                patch.setLocalPath(dir + File.separator + "patch");
+                patch.setTempMD5(jo.getString("tmpMD5"));
+                patch.setUrl(jo.getString("path"));
+                patch.setRsaKey(jo.getString("password"));
+                patch.setPatchesInfoImplClassFullName(PKG_NAME + DOT + CLZ_NAME);
+                patches.add(patch);
+            }
+            AppLog.step(1, "patch list size: " + patches.size());
+            response.close();
+        } catch (IOException e) {
+            AppLog.step(1, "fetch patch list io exception. " + e.getMessage());
+            e.printStackTrace();
+        } catch (JSONException e) {
+            AppLog.step(1, "fetch patch list  json exception. " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (response != null) response.close();
+        }
+
         return patches;
     }
 }

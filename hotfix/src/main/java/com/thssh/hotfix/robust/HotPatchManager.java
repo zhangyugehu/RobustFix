@@ -1,6 +1,12 @@
 package com.thssh.hotfix.robust;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.meituan.robust.Patch;
 import com.meituan.robust.PatchExecutor;
@@ -22,6 +28,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class HotPatchManager {
     //./gradlew clean  assembleRelease --stacktrace --no-daemon
@@ -34,6 +42,8 @@ public class HotPatchManager {
     private PatchDownloader downloader;
     private PatchProcessor processor;
     private Reporter reporter;
+
+    private PatchManipulateImpl mPatchManipulate;
 
     public static HotPatchManager getIns() {
         if (ins == null) {
@@ -50,51 +60,6 @@ public class HotPatchManager {
         this.downloader = new DefaultPatchDownloader();
         this.processor = new DefaultPatchProcessor();
         this.reporter = new DefaultReport();
-//        this.downloader = new PatchDownloader() {
-//            @Override
-//            public boolean downloadSync(String url, String path) {
-//                return true;
-//            }
-//
-//            @Override
-//            public void download(String url, String path, Callback callback) {
-//                AppLog.d("download: url: " + url + ", path: " + path);
-//            }
-//
-//            @Override
-//            public List<Patch> fetchPatchListSync(String dir) {
-//                AppLog.d("fetchPatchListSync: dir: " + dir);
-//                Patch patch = new Patch();
-//                patch.setLocalPath(dir + File.separator + "patch");
-//                patch.setPatchesInfoImplClassFullName("com.thssh.hotfix.patch.PatchesInfoImpl");
-//                return Arrays.asList(
-//                        patch
-//                );
-//            }
-//        };
-//        this.processor = new PatchProcessor() {
-//            @Override
-//            public void decodePatch(String cryptoGraph, Patch patch) throws ProcessException {
-//                try {
-//                    IoUtils.copyStream(new FileInputStream(new File(patch.getLocalPath())),
-//                            new FileOutputStream(new File(patch.getTempPath())), new IoUtils.CopyListener() {
-//                                @Override
-//                                public boolean onBytesCopied(int current, int total) {
-//                                    AppLog.d("onBytesCopied: process: " + current + "/" + total);
-//                                    return false;
-//                                }
-//                            });
-//                    patch.setMd5(MD5Tools.getFileMD5(new File(patch.getTempPath())));
-//                } catch (Exception e) {
-//                    throw new ProcessException(e.getMessage());
-//                }
-//            }
-//
-//            @Override
-//            public void decodePatch(Context context, String cryptoGraph, Patch patch) throws ProcessException {
-//
-//            }
-//        };
     }
 
     public HotPatchManager setDownloader(PatchDownloader downloader) {
@@ -121,8 +86,12 @@ public class HotPatchManager {
 
             @Override
             public void onPatchApplied(boolean result, Patch patch) {
+                AppLog.step(12, "patch result: " + (result?"success.": "failed"));
                 if (result) {
                     doReport("success");
+                    if (mPatchManipulate != null) {
+                        mPatchManipulate.addCache(patch.getMd5());
+                    }
                 } else {
                     doReport("failed_in_patch_" + patch.getName());
                 }
@@ -130,10 +99,12 @@ public class HotPatchManager {
                         ", isAppliedSuccess: " + patch.isAppliedSuccess() +
                         ", md5: " + patch.getMd5()
                 );
+                AppLog.step(0, "Robust Finished!");
             }
 
             @Override
             public void logNotify(String log, String where) {
+                doReport("failed_log: " + log + "|where: " + where);
                 AppLog.d("logNotify: log: " + log + " - where: " + where);
             }
 
@@ -150,21 +121,34 @@ public class HotPatchManager {
         reporter.report(TAG_PATCH_STATUS, status);
     }
 
+    private Context mContext;
+    private RobustCallBack mCallback;
     public HotPatchManager init(Context context, RobustCallBack callback) {
         AppLog.d("init: ");
         if (downloader == null) {
-            throw new IllegalArgumentException("PatchDownloader cannot null");
+            throw new IllegalArgumentException("PatchDownloader cannot be null");
         }
+        if (processor == null) {
+            throw new IllegalArgumentException("PatchProcessor cannot be null");
+        }
+        this.mContext = context;
+        this.mCallback = callback;
+        mPatchManipulate = new PatchManipulateImpl(downloader, processor, reporter);
 
-        executor = new PatchExecutor(
-                context,
-                new PatchManipulateImpl(downloader, processor, reporter),
-                callback
-        );
         return this;
     }
 
     public void execute() {
+        AppLog.step(0, "Robust Start!");
+        if (executor != null) {
+            executor.interrupt();
+        }
+        executor = new PatchExecutor(
+                mContext,
+                mPatchManipulate,
+                mCallback
+        );
         executor.start();
     }
+
 }

@@ -10730,14 +10730,44 @@ com.meituan.robust.utils.PatchTemplate -> com.meituan.robust.utils.PatchTemplate
     boolean isSupport(java.lang.String,java.lang.Object[]) -> isSupport
     java.lang.Object fixObj(java.lang.Object) -> fixObj
     void <clinit>() -> <clinit>
-com.thssh.hotfix.robust.HotPatchManager -> com.thssh.a.a.a:
-    com.thssh.hotfix.robust.HotPatchManager ins -> d
+com.thssh.common.log.AppLog -> com.thssh.a.a.a:
+    boolean mDebug -> a
+    int lastStep -> b
+    void d(java.lang.String) -> a
+    void step(int,java.lang.String) -> a
+    void e(java.lang.String,java.lang.Throwable) -> a
+    void <clinit>() -> <clinit>
+com.thssh.hotfix.robust.AppStateHelper -> com.thssh.b.a.a:
+    com.thssh.hotfix.robust.AppStateHelper$OnAppStateListener l -> a
+    android.app.Application$ActivityLifecycleCallbacks mLifeCycle -> b
+    void <init>() -> <init>
+com.thssh.hotfix.robust.AppStateHelper$1 -> com.thssh.b.a.a$1:
+    int mActivityCount -> b
+    com.thssh.hotfix.robust.AppStateHelper this$0 -> a
+    void <init>(com.thssh.hotfix.robust.AppStateHelper) -> <init>
+    void onActivityCreated(android.app.Activity,android.os.Bundle) -> onActivityCreated
+    void onActivityStarted(android.app.Activity) -> onActivityStarted
+    void onActivityResumed(android.app.Activity) -> onActivityResumed
+    void onActivityPaused(android.app.Activity) -> onActivityPaused
+    void onActivityStopped(android.app.Activity) -> onActivityStopped
+    void onActivitySaveInstanceState(android.app.Activity,android.os.Bundle) -> onActivitySaveInstanceState
+    void onActivityDestroyed(android.app.Activity) -> onActivityDestroyed
+com.thssh.hotfix.robust.AppStateHelper$OnAppStateListener -> com.thssh.b.a.a$a:
+    void onStateChanged(boolean) -> a
+com.thssh.hotfix.robust.HotPatchManager -> com.thssh.b.a.b:
+    com.thssh.hotfix.robust.HotPatchManager ins -> h
     com.meituan.robust.PatchExecutor executor -> a
     com.thssh.hotfix.robust.downloader.PatchDownloader downloader -> b
     com.thssh.hotfix.robust.processor.PatchProcessor processor -> c
+    com.thssh.hotfix.robust.repoter.Reporter reporter -> d
+    com.thssh.hotfix.robust.PatchManipulateImpl mPatchManipulate -> e
+    android.content.Context mContext -> f
+    com.meituan.robust.RobustCallBack mCallback -> g
     com.thssh.hotfix.robust.HotPatchManager getIns() -> a
     void <init>() -> <init>
-com.thssh.hotfix.robust.HotPatchManager$1 -> com.thssh.a.a.a$1:
+    void access$000(com.thssh.hotfix.robust.HotPatchManager,java.lang.String) -> a
+    com.thssh.hotfix.robust.PatchManipulateImpl access$100(com.thssh.hotfix.robust.HotPatchManager) -> a
+com.thssh.hotfix.robust.HotPatchManager$1 -> com.thssh.b.a.b$1:
     com.thssh.hotfix.robust.HotPatchManager this$0 -> a
     void <init>(com.thssh.hotfix.robust.HotPatchManager) -> <init>
     void onPatchListFetched(boolean,boolean,java.util.List) -> onPatchListFetched
@@ -10745,48 +10775,63 @@ com.thssh.hotfix.robust.HotPatchManager$1 -> com.thssh.a.a.a$1:
     void onPatchApplied(boolean,com.meituan.robust.Patch) -> onPatchApplied
     void logNotify(java.lang.String,java.lang.String) -> logNotify
     void exceptionNotify(java.lang.Throwable,java.lang.String) -> exceptionNotify
-com.thssh.hotfix.robust.PatchManipulateImpl -> com.thssh.a.a.b:
-    com.thssh.hotfix.robust.downloader.PatchDownloader downloader -> a
-    com.thssh.hotfix.robust.processor.PatchProcessor processor -> b
-    void <init>(com.thssh.hotfix.robust.downloader.PatchDownloader,com.thssh.hotfix.robust.processor.PatchProcessor) -> <init>
+com.thssh.hotfix.robust.PatchManipulateImpl -> com.thssh.b.a.c:
+    boolean ignoreAppHash -> b
+    com.thssh.hotfix.robust.downloader.PatchDownloader downloader -> c
+    com.thssh.hotfix.robust.processor.PatchProcessor processor -> d
+    com.thssh.hotfix.robust.repoter.Reporter reporter -> e
+    java.util.Set mPatchedCache -> a
+    void <init>(com.thssh.hotfix.robust.downloader.PatchDownloader,com.thssh.hotfix.robust.processor.PatchProcessor,com.thssh.hotfix.robust.repoter.Reporter) -> <init>
     java.util.List fetchPatchList(android.content.Context) -> fetchPatchList
     boolean verifyPatch(android.content.Context,com.meituan.robust.Patch) -> verifyPatch
     boolean ensurePatchExist(com.meituan.robust.Patch) -> ensurePatchExist
+    boolean isFileLocked(java.io.File) -> a
     boolean assertFileMD5(java.lang.String,java.lang.String) -> a
-com.thssh.hotfix.robust.crypto.FileAESUtil -> com.thssh.a.a.a.a:
-com.thssh.hotfix.robust.crypto.FileAESUtil$2 -> com.thssh.a.a.a.a$1:
+    java.lang.String getFileMd5(java.lang.String) -> a
+    void doReport(java.lang.String) -> b
+com.thssh.hotfix.robust.crypto.FileAESUtil -> com.thssh.b.a.a.a:
+com.thssh.hotfix.robust.crypto.FileAESUtil$2 -> com.thssh.b.a.a.a$1:
     void <init>() -> <init>
     boolean onBytesCopied(int,int) -> a
-com.thssh.hotfix.robust.crypto.RSAUtil -> com.thssh.a.a.a.b:
+com.thssh.hotfix.robust.crypto.RSAUtil -> com.thssh.b.a.a.b:
     java.security.Key getKey(java.io.InputStream) -> a
-com.thssh.hotfix.robust.downloader.DefaultPatchDownloader -> com.thssh.a.a.b.a:
+com.thssh.hotfix.robust.downloader.DefaultPatchDownloader -> com.thssh.b.a.b.a:
     okhttp3.OkHttpClient client -> a
     void <init>() -> <init>
     boolean downloadSync(java.lang.String,java.lang.String) -> a
     java.util.List fetchPatchListSync(java.lang.String) -> a
-com.thssh.hotfix.robust.downloader.DefaultPatchDownloader$1 -> com.thssh.a.a.b.a$1:
+com.thssh.hotfix.robust.downloader.DefaultPatchDownloader$1 -> com.thssh.b.a.b.a$1:
     com.thssh.hotfix.robust.downloader.DefaultPatchDownloader this$0 -> a
     void <init>(com.thssh.hotfix.robust.downloader.DefaultPatchDownloader) -> <init>
     boolean onBytesCopied(int,int) -> a
-com.thssh.hotfix.robust.downloader.PatchDownloader -> com.thssh.a.a.b.b:
+com.thssh.hotfix.robust.downloader.PatchDownloader -> com.thssh.b.a.b.b:
     boolean downloadSync(java.lang.String,java.lang.String) -> a
     java.util.List fetchPatchListSync(java.lang.String) -> a
-com.thssh.hotfix.robust.processor.DefaultPatchProcessor -> com.thssh.a.a.c.a:
+com.thssh.hotfix.robust.model.CryptPatch -> com.thssh.b.a.c.a:
+    java.lang.String rsaKey -> a
+    java.lang.String tempMD5 -> b
+    void <init>() -> <init>
+com.thssh.hotfix.robust.processor.DefaultPatchProcessor -> com.thssh.b.a.d.a:
     void <init>() -> <init>
     void decodePatch(android.content.Context,java.lang.String,com.meituan.robust.Patch) -> a
-com.thssh.hotfix.robust.processor.PatchProcessor -> com.thssh.a.a.c.b:
+com.thssh.hotfix.robust.processor.PatchProcessor -> com.thssh.b.a.d.b:
     void decodePatch(android.content.Context,java.lang.String,com.meituan.robust.Patch) -> a
-com.thssh.hotfix.robust.processor.ProcessException -> com.thssh.a.a.c.c:
+com.thssh.hotfix.robust.processor.ProcessException -> com.thssh.b.a.d.c:
     void <init>() -> <init>
     void <init>(java.lang.String) -> <init>
-com.thssh.hotfix.util.IoUtils -> com.thssh.a.b.a:
+com.thssh.hotfix.robust.repoter.DefaultReport -> com.thssh.b.a.e.a:
+    void <init>() -> <init>
+    void report(java.lang.String,java.lang.Object) -> a
+com.thssh.hotfix.robust.repoter.Reporter -> com.thssh.b.a.e.b:
+    void report(java.lang.String,java.lang.Object) -> a
+com.thssh.hotfix.util.IoUtils -> com.thssh.b.b.a:
     boolean copyStream(java.io.InputStream,java.io.OutputStream,com.thssh.hotfix.util.IoUtils$CopyListener) -> a
     boolean copyStream$5fe0ade7(java.io.InputStream,java.io.OutputStream,com.thssh.hotfix.util.IoUtils$CopyListener) -> b
     boolean shouldStopLoading(com.thssh.hotfix.util.IoUtils$CopyListener,int,int) -> a
     void closeSilently(java.io.Closeable) -> a
-com.thssh.hotfix.util.IoUtils$CopyListener -> com.thssh.a.b.a$a:
+com.thssh.hotfix.util.IoUtils$CopyListener -> com.thssh.b.b.a$a:
     boolean onBytesCopied(int,int) -> a
-com.thssh.hotfix.util.MD5Tools -> com.thssh.a.b.b:
+com.thssh.hotfix.util.MD5Tools -> com.thssh.b.b.b:
     byte[] PADDING -> a
     long[] state -> b
     long[] count -> c
@@ -10810,12 +10855,23 @@ com.thssh.hotfix.util.MD5Tools -> com.thssh.a.b.b:
     void <clinit>() -> <clinit>
 com.thssh.robustfix.App -> com.thssh.robustfix.App:
     com.meituan.robust.ChangeQuickRedirect changeQuickRedirect -> a
+    com.thssh.hotfix.robust.AppStateHelper mAppStateHelper -> b
+    com.thssh.hotfix.robust.HotPatchManager mPatchManager -> c
     void <init>() -> <init>
     void onCreate() -> onCreate
+    void onTerminate() -> onTerminate
+    com.thssh.hotfix.robust.HotPatchManager access$000(com.thssh.robustfix.App) -> a
+com.thssh.robustfix.App$1 -> com.thssh.robustfix.App$1:
+    com.meituan.robust.ChangeQuickRedirect changeQuickRedirect -> a
+    com.thssh.robustfix.App this$0 -> b
+    void <init>(com.thssh.robustfix.App) -> <init>
+    void onStateChanged(boolean) -> a
 com.thssh.robustfix.MainActivity -> com.thssh.robustfix.MainActivity:
     com.meituan.robust.ChangeQuickRedirect changeQuickRedirect -> k
+    android.widget.TextView tv -> l
     void <init>() -> <init>
     void onCreate(android.os.Bundle) -> onCreate
+    void btnClick(android.view.View) -> btnClick
 okhttp3.Address -> a.a:
     okhttp3.HttpUrl url -> a
     okhttp3.Dns dns -> b
@@ -11216,9 +11272,14 @@ okhttp3.Interceptor$Chain -> a.r$a:
     okhttp3.Request request() -> a
     okhttp3.Response proceed(okhttp3.Request) -> a
 okhttp3.MediaType -> a.s:
-    java.util.regex.Pattern TYPE_SUBTYPE -> a
-    java.util.regex.Pattern PARAMETER -> b
-    java.lang.String mediaType -> c
+    java.util.regex.Pattern TYPE_SUBTYPE -> b
+    java.util.regex.Pattern PARAMETER -> c
+    java.lang.String mediaType -> d
+    java.lang.String type -> e
+    java.lang.String subtype -> f
+    java.lang.String charset -> a
+    void <init>(java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> <init>
+    okhttp3.MediaType parse(java.lang.String) -> a
     java.lang.String toString() -> toString
     boolean equals(java.lang.Object) -> equals
     int hashCode() -> hashCode
@@ -11257,6 +11318,7 @@ okhttp3.OkHttpClient -> a.t:
     javax.net.ssl.X509TrustManager systemDefaultTrustManager() -> b
     javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager) -> a
     okhttp3.internal.cache.InternalCache internalCache() -> a
+    okhttp3.Call newCall(okhttp3.Request) -> a
     void <clinit>() -> <clinit>
 okhttp3.OkHttpClient$1 -> a.t$1:
     void <init>() -> <init>
@@ -11345,8 +11407,9 @@ okhttp3.Request$Builder -> a.w$a:
     void <init>() -> <init>
     void <init>(okhttp3.Request) -> <init>
     okhttp3.Request$Builder url(okhttp3.HttpUrl) -> a
+    okhttp3.Request$Builder url(java.lang.String) -> a
     okhttp3.Request$Builder header(java.lang.String,java.lang.String) -> a
-    okhttp3.Request$Builder removeHeader(java.lang.String) -> a
+    okhttp3.Request$Builder removeHeader(java.lang.String) -> b
     okhttp3.Request$Builder method(java.lang.String,okhttp3.RequestBody) -> a
     okhttp3.Request build() -> a
 okhttp3.RequestBody -> a.x:
@@ -11406,8 +11469,10 @@ okhttp3.Response$Builder -> a.y$a:
     okhttp3.Response build() -> a
 okhttp3.ResponseBody -> a.z:
     void <init>() -> <init>
-    long contentLength() -> a
-    okio.BufferedSource source() -> b
+    okhttp3.MediaType contentType() -> a
+    long contentLength() -> b
+    okio.BufferedSource source() -> c
+    java.lang.String string() -> d
     void close() -> close
     okhttp3.ResponseBody create$7d74f0d(byte[]) -> a
 okhttp3.ResponseBody$1 -> a.z$1:
@@ -11415,8 +11480,9 @@ okhttp3.ResponseBody$1 -> a.z$1:
     long val$contentLength -> b
     okio.BufferedSource val$content -> c
     void <init>(long,okio.BufferedSource) -> <init>
-    long contentLength() -> a
-    okio.BufferedSource source() -> b
+    okhttp3.MediaType contentType() -> a
+    long contentLength() -> b
+    okio.BufferedSource source() -> c
 okhttp3.Route -> a.aa:
     okhttp3.Address address -> a
     java.net.Proxy proxy -> b
@@ -11495,6 +11561,7 @@ okhttp3.internal.Util -> a.a.c:
     int indexOfControlOrNonAscii(java.lang.String) -> b
     boolean verifyAsIpAddress(java.lang.String) -> c
     java.lang.String format(java.lang.String,java.lang.Object[]) -> a
+    java.nio.charset.Charset bomAwareCharset(okio.BufferedSource,java.nio.charset.Charset) -> a
     void <clinit>() -> <clinit>
 okhttp3.internal.Util$1 -> a.a.c$1:
     java.lang.String val$name -> a
@@ -11731,8 +11798,9 @@ okhttp3.internal.http.RealResponseBody -> a.a.c.h:
     okhttp3.Headers headers -> a
     okio.BufferedSource source -> b
     void <init>(okhttp3.Headers,okio.BufferedSource) -> <init>
-    long contentLength() -> a
-    okio.BufferedSource source() -> b
+    okhttp3.MediaType contentType() -> a
+    long contentLength() -> b
+    okio.BufferedSource source() -> c
 okhttp3.internal.http.RequestLine -> a.a.c.i:
     java.lang.String requestPath(okhttp3.HttpUrl) -> a
 okhttp3.internal.http.RetryAndFollowUpInterceptor -> a.a.c.j:
@@ -12441,6 +12509,7 @@ okio.Buffer -> b.c:
     okio.ByteString readByteString(long) -> c
     java.lang.String readUtf8() -> m
     java.lang.String readUtf8(long) -> k
+    java.lang.String readString(java.nio.charset.Charset) -> a
     java.lang.String readString(long,java.nio.charset.Charset) -> a
     java.lang.String readUtf8LineStrict() -> n
     java.lang.String readUtf8Line(long) -> d
@@ -12467,6 +12536,7 @@ okio.Buffer -> b.c:
     long read(okio.Buffer,long) -> a
     long indexOf$132bdb() -> q
     long indexOf(byte,long) -> a
+    boolean rangeEquals$45b61a70(okio.ByteString) -> b
     void flush() -> flush
     void close() -> close
     okio.Timeout timeout() -> a
@@ -12518,7 +12588,9 @@ okio.BufferedSource -> b.e:
     okio.ByteString readByteString(long) -> c
     byte[] readByteArray(long) -> e
     java.lang.String readUtf8LineStrict() -> n
+    java.lang.String readString(java.nio.charset.Charset) -> a
     long indexOf$132bdb() -> q
+    boolean rangeEquals$45b61a70(okio.ByteString) -> b
     java.io.InputStream inputStream() -> d
 okio.ByteString -> b.f:
     char[] HEX_DIGITS -> a
@@ -12655,6 +12727,7 @@ okio.RealBufferedSource -> b.m:
     byte readByte() -> f
     okio.ByteString readByteString(long) -> c
     byte[] readByteArray(long) -> e
+    java.lang.String readString(java.nio.charset.Charset) -> a
     java.lang.String readUtf8LineStrict() -> n
     short readShort() -> g
     short readShortLe() -> i
@@ -12664,6 +12737,7 @@ okio.RealBufferedSource -> b.m:
     void skip(long) -> f
     long indexOf$132bdb() -> q
     long indexOf(byte,long) -> a
+    boolean rangeEquals$45b61a70(okio.ByteString) -> b
     java.io.InputStream inputStream() -> d
     void close() -> close
     okio.Timeout timeout() -> a
